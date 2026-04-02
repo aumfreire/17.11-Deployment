@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { getCustomerId } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 type Props = { params: Promise<{ orderId: string }> };
 
 export default async function OrderDetailPage({ params }: Props) {

@@ -1,6 +1,8 @@
 import { getDb } from "@/lib/db";
 import { CustomerSelectClient } from "./CustomerSelectClient";
 
+export const dynamic = "force-dynamic";
+
 export default async function SelectCustomerPage() {
   const db = getDb();
   const customers = await db

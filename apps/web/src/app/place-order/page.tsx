@@ -3,6 +3,8 @@ import { getCustomerId } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { PlaceOrderForm } from "./PlaceOrderForm";
 
+export const dynamic = "force-dynamic";
+
 export default async function PlaceOrderPage() {
   const customerId = await getCustomerId();
   if (!customerId) {

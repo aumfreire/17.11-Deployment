@@ -2,6 +2,8 @@ import Link from "next/link";
 import { getCustomerId } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 export default async function OrdersPage() {
   const customerId = await getCustomerId();
   if (!customerId) {
