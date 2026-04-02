@@ -37,7 +37,14 @@ def main() -> None:
         raise SystemExit(
             f"Missing model {MODEL_PATH}. Run: python3 ml/jobs/train_model.py"
         )
-    pipe = joblib.load(MODEL_PATH)
+    try:
+        pipe = joblib.load(MODEL_PATH)
+    except AttributeError as exc:
+        raise SystemExit(
+            "Failed to load model artifact due to scikit-learn version mismatch. "
+            "Install job deps with: python3 -m pip install -r requirements-jobs.txt "
+            "and retrain with: python3 ml/jobs/train_model.py"
+        ) from exc
     score_df = load_scoring_frame(DB_PATH)
     if score_df.empty:
         print("Scored 0 orders")

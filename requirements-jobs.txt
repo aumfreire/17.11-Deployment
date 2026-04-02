@@ -1,5 +1,6 @@
 pandas>=2.0,<3
 numpy>=1.24,<3
-# After changing scikit-learn, re-run: python3 ml/jobs/train_model.py (avoids unpickle version warnings).
-scikit-learn>=1.6,<2
+# Model artifacts in ml/artifacts were serialized with sklearn 1.6.1.
+# Keep this pinned unless you retrain and replace all joblib artifacts.
+scikit-learn==1.6.1
 joblib>=1.3,<2

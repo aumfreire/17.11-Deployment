@@ -41,62 +41,69 @@ export function PlaceOrderForm({ products }: { products: Product[] }) {
   }
 
   return (
-    <form onSubmit={submit} className="card" style={{ maxWidth: 640 }}>
-      <h2 style={{ marginTop: 0 }}>Lines</h2>
-      {lines.map((line, i) => (
-        <div key={i} style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem", flexWrap: "wrap" }}>
-          <select
-            value={line.product_id}
-            onChange={(e) => {
-              const next = [...lines];
-              next[i] = { ...next[i], product_id: parseInt(e.target.value, 10) };
-              setLines(next);
-            }}
-          >
-            {products.map((p) => (
-              <option key={p.product_id} value={p.product_id}>
-                {p.sku} — {p.product_name} (${p.price.toFixed(2)})
-              </option>
-            ))}
-          </select>
-          <input
-            type="number"
-            min={1}
-            value={line.quantity}
-            onChange={(e) => {
-              const next = [...lines];
-              next[i] = { ...next[i], quantity: Math.max(1, parseInt(e.target.value, 10) || 1) };
-              setLines(next);
-            }}
-            style={{ width: 72 }}
-          />
-          <button
-            type="button"
-            onClick={() => setLines(lines.filter((_, j) => j !== i))}
-            disabled={lines.length <= 1}
-            style={{ background: "#444" }}
-          >
-            Remove
-          </button>
-        </div>
-      ))}
+    <form onSubmit={submit} className="card form-card">
+      <h2 className="form-section-title">Order lines</h2>
+      <div className="order-lines">
+        {lines.map((line, i) => (
+          <div key={i} className="line-row">
+            <div className="field field-product">
+              <label>Product</label>
+              <select
+                value={line.product_id}
+                onChange={(e) => {
+                  const next = [...lines];
+                  next[i] = { ...next[i], product_id: parseInt(e.target.value, 10) };
+                  setLines(next);
+                }}
+              >
+                {products.map((p) => (
+                  <option key={p.product_id} value={p.product_id}>
+                    {p.sku} — {p.product_name} (${p.price.toFixed(2)})
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="field field-qty">
+              <label>Quantity</label>
+              <input
+                type="number"
+                min={1}
+                value={line.quantity}
+                onChange={(e) => {
+                  const next = [...lines];
+                  next[i] = { ...next[i], quantity: Math.max(1, parseInt(e.target.value, 10) || 1) };
+                  setLines(next);
+                }}
+              />
+            </div>
+            <button
+              type="button"
+              onClick={() => setLines(lines.filter((_, j) => j !== i))}
+              disabled={lines.length <= 1}
+              className="btn-neutral"
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+      </div>
       <button
         type="button"
         onClick={() =>
           setLines([...lines, { product_id: products[0]?.product_id ?? 0, quantity: 1 }])
         }
-        style={{ background: "transparent", border: "1px solid var(--border)", color: "var(--text)", marginBottom: "1rem" }}
+        className="btn-secondary mb-btn-gap"
       >
         + Add line
       </button>
 
-      <h2>Checkout defaults</h2>
-      <p style={{ color: "var(--muted)", fontSize: "0.85rem", marginTop: 0 }}>
+      <h2 className="form-section-title">Checkout defaults</h2>
+      <p className="muted small-print">
         Payment / device / country are fixed for the demo; adjust in code if needed.
       </p>
-      <label style={{ display: "block", marginBottom: "0.75rem" }}>
-        Promo code (optional)
-        <input value={promo_code} onChange={(e) => setPromo(e.target.value)} style={{ display: "block", marginTop: 4, width: "100%" }} />
+      <label className="field field-promo field-promo-spacing">
+        <span>Promo code (optional)</span>
+        <input value={promo_code} onChange={(e) => setPromo(e.target.value)} />
       </label>
 
       {err && <p className="err">{err}</p>}

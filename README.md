@@ -54,7 +54,12 @@ If **`run_inference.py`** prints **`InconsistentVersionWarning`** (model saved w
 python3 ml/jobs/train_model.py
 ```
 
-Alternatively upgrade scikit-learn to match the version that created the artifact (`python3 -m pip install -U pip` first if installs fail).
+If loading fails with a pickle `AttributeError`, reinstall job dependencies (which pin sklearn for artifact compatibility) and retrain:
+
+```bash
+python3 -m pip install -r requirements-jobs.txt
+python3 ml/jobs/train_model.py
+```
 
 Score open orders and upsert `order_predictions`:
 

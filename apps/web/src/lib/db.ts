@@ -49,8 +49,10 @@ function getPgPool(): Pool {
     if (!connectionString) {
       throw new Error("DATABASE_URL is not set.");
     }
+    const normalizedUrl = new URL(connectionString);
+    normalizedUrl.searchParams.delete("sslmode");
     pgPool = new Pool({
-      connectionString,
+      connectionString: normalizedUrl.toString(),
       ssl: { rejectUnauthorized: false },
     });
   }

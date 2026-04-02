@@ -29,14 +29,14 @@ export default function ScoringPage() {
   return (
     <div>
       <h1>Run scoring</h1>
-      <p style={{ color: "var(--muted)" }}>
+      <p className="lead">
         Calls <code>SCORING_URL</code> when configured, otherwise falls back to <code>python3 ml/jobs/run_inference.py</code> locally.
       </p>
       <button type="button" onClick={run} disabled={loading}>
         {loading ? "Running…" : "Run inference"}
       </button>
       {msg && <p className="ok">{msg}</p>}
-      {err && <pre className="err" style={{ whiteSpace: "pre-wrap" }}>{err}</pre>}
+      {err && <pre className="err pre-err">{err}</pre>}
     </div>
   );
 }

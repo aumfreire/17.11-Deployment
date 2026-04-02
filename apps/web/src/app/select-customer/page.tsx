@@ -16,8 +16,9 @@ export default async function SelectCustomerPage() {
   return (
     <div>
       <h1>Select customer</h1>
-      <p style={{ color: "var(--muted)" }}>
-        Sets a <code>customer_id</code> cookie used by dashboard, orders, and place order.
+      <p className="lead">
+        Choose the customer context for this session. This sets the <code>customer_id</code> cookie used by
+        dashboard, orders, and place-order flows.
       </p>
       <CustomerSelectClient customers={customers as never} />
     </div>

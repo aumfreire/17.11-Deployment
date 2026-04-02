@@ -42,7 +42,9 @@ export default async function OrderDetailPage({ params }: Props) {
   return (
     <div>
       <p>
-        <Link href="/orders">← Orders</Link>
+        <Link href="/orders" className="callout-link">
+          ← Orders
+        </Link>
       </p>
       <h1>Order #{orderId}</h1>
       <div className="card">
@@ -51,7 +53,7 @@ export default async function OrderDetailPage({ params }: Props) {
         </p>
         <p>
           <strong>Total:</strong> ${Number(order.order_total).toFixed(2)} ·{" "}
-          {Number(order.fulfilled) ? "Fulfilled" : "Open"}
+          <span className="muted">{Number(order.fulfilled) ? "Fulfilled" : "Open"}</span>
         </p>
       </div>
       <h2>Line items</h2>

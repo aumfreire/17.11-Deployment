@@ -46,17 +46,64 @@ export default async function DashboardPage() {
     fulfilled: number;
   }[];
 
+  const summary = await db
+    .prepare(
+      `SELECT
+         COUNT(*) AS total_orders,
+         SUM(CASE WHEN fulfilled = 1 THEN 1 ELSE 0 END) AS fulfilled_orders,
+         SUM(CASE WHEN fulfilled = 0 THEN 1 ELSE 0 END) AS open_orders,
+         COALESCE(SUM(order_total), 0) AS total_spent,
+         COALESCE(AVG(order_total), 0) AS avg_order_value,
+         MAX(order_datetime) AS last_order_at
+       FROM orders
+       WHERE customer_id = ?`,
+    )
+    .get(customerId) as {
+    total_orders: number;
+    fulfilled_orders: number | null;
+    open_orders: number | null;
+    total_spent: number;
+    avg_order_value: number;
+    last_order_at: string | null;
+  };
+
   return (
     <div>
       <h1>Dashboard</h1>
       <div className="card">
-        <p style={{ margin: 0 }}>
+        <p>
           <strong>{customer.full_name}</strong>
-          <span style={{ color: "var(--muted)" }}> · {customer.email}</span>
+          <span className="muted"> · {customer.email}</span>
         </p>
-        <p style={{ margin: "0.5rem 0 0", color: "var(--muted)", fontSize: "0.9rem" }}>
+        <p className="muted">
           {[customer.customer_segment, customer.loyalty_tier].filter(Boolean).join(" · ") || "—"}
         </p>
+      </div>
+      <div className="stats-grid">
+        <article className="stat-card">
+          <span className="stat-label">Total orders</span>
+          <span className="stat-value">{summary.total_orders}</span>
+        </article>
+        <article className="stat-card">
+          <span className="stat-label">Open</span>
+          <span className="stat-value">{summary.open_orders ?? 0}</span>
+        </article>
+        <article className="stat-card">
+          <span className="stat-label">Fulfilled</span>
+          <span className="stat-value">{summary.fulfilled_orders ?? 0}</span>
+        </article>
+        <article className="stat-card">
+          <span className="stat-label">Total spent</span>
+          <span className="stat-value">${summary.total_spent.toFixed(2)}</span>
+        </article>
+        <article className="stat-card">
+          <span className="stat-label">Avg order value</span>
+          <span className="stat-value">${summary.avg_order_value.toFixed(2)}</span>
+        </article>
+        <article className="stat-card">
+          <span className="stat-label">Last order</span>
+          <span className="stat-value stat-value--compact">{summary.last_order_at ?? "No orders"}</span>
+        </article>
       </div>
       <h2>Recent orders</h2>
       {orders.length === 0 ? (
@@ -75,7 +122,9 @@ export default async function DashboardPage() {
             {orders.map((o) => (
               <tr key={o.order_id}>
                 <td>
-                  <Link href={`/orders/${o.order_id}`}>#{o.order_id}</Link>
+                  <Link href={`/orders/${o.order_id}`} className="table-link">
+                    #{o.order_id}
+                  </Link>
                 </td>
                 <td>{o.order_datetime}</td>
                 <td>${o.order_total.toFixed(2)}</td>

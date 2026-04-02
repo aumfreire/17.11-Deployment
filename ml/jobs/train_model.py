@@ -13,6 +13,7 @@ if str(JOB_DIR) not in sys.path:
 
 import joblib
 from feature_frame import CAT_COLS, NUM_COLS, ROOT, load_training_frame
+from sklearn import __version__ as sklearn_version
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.impute import SimpleImputer
@@ -76,6 +77,7 @@ def main() -> None:
     meta = {
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
         "task": "late_delivery",
+        "sklearn_version": sklearn_version,
         "n_train": int(len(X_train)),
         "n_test": int(len(X_test)),
         "roc_auc_holdout": float(roc_auc_score(y_test, proba)),
