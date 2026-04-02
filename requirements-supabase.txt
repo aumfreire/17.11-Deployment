@@ -1,2 +1,2 @@
-# For scripts/sqlite_to_postgres.py (copy shop.db → Supabase Postgres)
+# For tools/scripts/sqlite_to_postgres.py (copy shop.db → Supabase Postgres)
 psycopg[binary]>=3.1,<4

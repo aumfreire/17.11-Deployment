@@ -1,0 +1,8 @@
+{
+  "created_at_utc": "2026-04-02T15:27:10.953776+00:00",
+  "task": "late_delivery",
+  "n_train": 4000,
+  "n_test": 1000,
+  "roc_auc_holdout": 0.7199190976144594,
+  "average_precision_holdout": 0.8014688183048183
+}

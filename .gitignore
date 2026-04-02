@@ -4,12 +4,18 @@ __pycache__/
 *.pyc
 .ipynb_checkpoints/
 
-# Next.js (web/)
-web/node_modules/
-web/.next/
-web/.env.local
+# Next.js (apps/web)
+apps/web/node_modules/
+apps/web/.next/
+apps/web/.env.local
 
 # Local env / secrets
 .env
 .env.local
 *.pem
+
+# Local backups
+backups/
+
+# Keep reference textbook local-only
+docs/reference/*.pdf
