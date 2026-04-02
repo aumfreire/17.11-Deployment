@@ -15,7 +15,7 @@ export default async function DashboardPage() {
   }
 
   const db = getDb();
-  const customer = db
+  const customer = await db
     .prepare(`SELECT full_name, email, customer_segment, loyalty_tier FROM customers WHERE customer_id = ?`)
     .get(customerId) as
     | { full_name: string; email: string; customer_segment: string | null; loyalty_tier: string | null }
@@ -31,7 +31,7 @@ export default async function DashboardPage() {
     );
   }
 
-  const orders = db
+  const orders = await db
     .prepare(
       `SELECT order_id, order_datetime, order_total, fulfilled
        FROM orders

@@ -14,7 +14,7 @@ export default async function OrdersPage() {
   }
 
   const db = getDb();
-  const rows = db
+  const rows = await db
     .prepare(
       `SELECT order_id, order_datetime, order_total, fulfilled
        FROM orders WHERE customer_id = ?

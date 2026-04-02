@@ -16,7 +16,7 @@ export default async function PlaceOrderPage() {
   }
 
   const db = getDb();
-  const products = db
+  const products = await db
     .prepare(
       `SELECT product_id, sku, product_name, price FROM products WHERE is_active = 1 ORDER BY product_name LIMIT 500`,
     )
@@ -25,7 +25,7 @@ export default async function PlaceOrderPage() {
   return (
     <div>
       <h1>Place order</h1>
-      <p style={{ color: "var(--muted)" }}>Creates one order + line items in a single SQLite transaction.</p>
+      <p style={{ color: "var(--muted)" }}>Creates one order + line items in a single database transaction.</p>
       {products.length === 0 ? (
         <p>No active products.</p>
       ) : (

@@ -1,9 +1,9 @@
 import { getDb } from "@/lib/db";
 import { CustomerSelectClient } from "./CustomerSelectClient";
 
-export default function SelectCustomerPage() {
+export default async function SelectCustomerPage() {
   const db = getDb();
-  const customers = db
+  const customers = await db
     .prepare(
       `SELECT customer_id, full_name, email, city, state
        FROM customers

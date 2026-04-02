@@ -3,7 +3,7 @@
 Two deliverables live in this repo:
 
 1. **Part 2 — CRISP-DM notebook:** [`fraud_detection_crispdm.ipynb`](fraud_detection_crispdm.ipynb) predicts `orders.is_fraud` (separate from the web app).
-2. **Part 1 — Web app (Chapter 17):** Next.js app under [`web/`](web/) with SQLite [`db/shop.db`](db/shop.db), operational flows, and **late-delivery** scoring into `order_predictions` (not fraud).
+2. **Part 1 — Web app (Chapter 17):** Next.js app under [`web/`](web/) with operational flows, Supabase-ready PostgreSQL support via `DATABASE_URL`, and **late-delivery** scoring into `order_predictions` (not fraud).
 
 ## Supabase (PostgreSQL) from `shop.db`
 
@@ -20,7 +20,7 @@ export DATABASE_URL="postgresql://..."
 python3 scripts/sqlite_to_postgres.py
 ```
 
-The Next.js app and Python jobs still target **SQLite** until you change them to use `DATABASE_URL` (separate task).
+The Next.js app now uses `DATABASE_URL` when it is set and falls back to local SQLite for development.
 
 ## Database setup (local SQLite)
 
@@ -81,18 +81,28 @@ Open [http://localhost:3000](http://localhost:3000). Paths:
 | `/dashboard` | Summary + 5 recent orders |
 | `/place-order` | Multi-line insert (transaction) |
 | `/orders` | History; detail at `/orders/[orderId]` |
-| `/scoring` | Runs `python3 jobs/run_inference.py` via API |
+| `/scoring` | Calls `SCORING_URL` when configured, otherwise runs `python3 jobs/run_inference.py` locally |
 | `/warehouse/priority` | Top 50 unfulfilled by predicted late risk |
 
 ### Environment
 
-From `web/`, the default SQLite path resolves to **parent**/ `db/shop.db`. See [`web/.env.local.example`](web/.env.local.example) for `SHOP_REPO_ROOT`, `SHOP_DB_PATH`, and `PYTHON_PATH`.
+From `web/`, the app uses `DATABASE_URL` when present. See [`web/.env.local.example`](web/.env.local.example) for `SHOP_REPO_ROOT`, `SHOP_DB_PATH`, `PYTHON_PATH`, `DATABASE_URL`, and `SCORING_URL`.
 
-**Run scoring** requires Python on the server with `requirements-jobs.txt` installed and working directory at the **repo root** (so `jobs/run_inference.py` and `db/shop.db` resolve).
+**Run scoring** works locally with Python on the server and `requirements-jobs.txt` installed. In production, set `SCORING_URL` to an external job endpoint that can run `jobs/run_inference.py` against Supabase.
 
-## Deployment (Vercel vs equivalent)
+## Deployment (Supabase + Vercel)
 
-**Vercel** is a poor fit for **local `better-sqlite3` + writable SQLite + spawning Python**. Use **Render**, **Railway**, **Fly.io**, or a **VPS** with a persistent disk, or submit your course’s “Vercel or equivalent” URL from one of those hosts.
+1. Create the Supabase database.
+	- Run [`supabase/migrations/20250402120000_shop_schema.sql`](supabase/migrations/20250402120000_shop_schema.sql) in the Supabase SQL editor.
+	- Run [`supabase/migrations/20250402120001_reset_sequences.sql`](supabase/migrations/20250402120001_reset_sequences.sql) after loading data.
+	- Load the SQLite data with [`scripts/sqlite_to_postgres.py`](scripts/sqlite_to_postgres.py) or [`db/migrate_to_supabase.py`](db/migrate_to_supabase.py) using `DATABASE_URL`.
+2. Deploy the Next.js app to Vercel.
+	- Set `DATABASE_URL` to the Supabase pooler connection string.
+	- Set `SCORING_URL` to an external Python job endpoint if you want the `Run scoring` button to work in production.
+	- Set `SHOP_REPO_ROOT` only if the app root is not the repo root.
+3. Deploy scoring as a separate Python service.
+	- Any host that can run `jobs/run_inference.py` works, such as Render, Railway, Fly.io, or a VPS.
+	- The service should expose a `POST` endpoint that Vercel can call through `SCORING_URL`.
 
 ## Project layout
 

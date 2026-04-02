@@ -30,8 +30,7 @@ export default function ScoringPage() {
     <div>
       <h1>Run scoring</h1>
       <p style={{ color: "var(--muted)" }}>
-        Calls <code>python3 jobs/run_inference.py</code> at the repo root (late-delivery model →{" "}
-        <code>order_predictions</code>).
+        Calls <code>SCORING_URL</code> when configured, otherwise falls back to <code>python3 jobs/run_inference.py</code> locally.
       </p>
       <button type="button" onClick={run} disabled={loading}>
         {loading ? "Running…" : "Run inference"}

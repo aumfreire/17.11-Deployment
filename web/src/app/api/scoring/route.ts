@@ -3,6 +3,30 @@ import path from "path";
 import { getPythonPath, getRepoRoot } from "@/lib/paths";
 
 export async function POST() {
+  const externalScoringUrl = process.env.SCORING_URL;
+  if (externalScoringUrl) {
+    const response = await fetch(externalScoringUrl, { method: "POST" });
+    const stdout = await response.text();
+    if (!response.ok) {
+      return Response.json(
+        { ok: false, error: stdout || `Scoring endpoint failed with ${response.status}` },
+        { status: response.status },
+      );
+    }
+    return Response.json({ ok: true, stdout: stdout.trim() });
+  }
+
+  if (process.env.VERCEL) {
+    return Response.json(
+      {
+        ok: false,
+        error:
+          "Scoring is not configured for Vercel. Set SCORING_URL to an external job endpoint that can run jobs/run_inference.py.",
+      },
+      { status: 501 },
+    );
+  }
+
   const root = getRepoRoot();
   const py = getPythonPath();
   const script = path.join(root, "jobs", "run_inference.py");

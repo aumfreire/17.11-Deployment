@@ -22,14 +22,14 @@ export default async function OrderDetailPage({ params }: Props) {
   }
 
   const db = getDb();
-  const order = db
+  const order = await db
     .prepare(
       `SELECT * FROM orders WHERE order_id = ? AND customer_id = ?`,
     )
     .get(orderId, customerId) as Record<string, unknown> | undefined;
   if (!order) notFound();
 
-  const items = db
+  const items = await db
     .prepare(
       `SELECT oi.*, p.product_name, p.sku
        FROM order_items oi

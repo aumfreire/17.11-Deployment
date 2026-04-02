@@ -1,8 +1,8 @@
 import { getDb } from "@/lib/db";
 
-export default function WarehousePriorityPage() {
+export default async function WarehousePriorityPage() {
   const db = getDb();
-  const rows = db
+  const rows = await db
     .prepare(
       `SELECT
          o.order_id,
