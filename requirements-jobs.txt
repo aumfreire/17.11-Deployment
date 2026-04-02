@@ -1,0 +1,5 @@
+pandas>=2.0,<3
+numpy>=1.24,<3
+# After changing scikit-learn, re-run: python3 jobs/train_model.py (avoids unpickle version warnings).
+scikit-learn>=1.6,<2
+joblib>=1.3,<2

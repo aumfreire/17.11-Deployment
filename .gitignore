@@ -1,0 +1,15 @@
+.DS_Store
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Next.js (web/)
+web/node_modules/
+web/.next/
+web/.env.local
+
+# Local env / secrets
+.env
+.env.local
+*.pem
