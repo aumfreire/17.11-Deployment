@@ -79,15 +79,15 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000). Paths:
 
-| Route | Purpose |
-|--------|---------|
-| `/debug/schema` | Table / column inspector |
-| `/select-customer` | Sets `customer_id` cookie |
-| `/dashboard` | Summary + 5 recent orders |
-| `/place-order` | Multi-line insert (transaction) |
-| `/orders` | History; detail at `/orders/[orderId]` |
-| `/scoring` | Calls `SCORING_URL` when configured, otherwise runs `python3 ml/jobs/run_inference.py` locally |
-| `/warehouse/priority` | Top 50 unfulfilled by predicted late risk |
+| Route                 | Purpose                                                                                        |
+| --------------------- | ---------------------------------------------------------------------------------------------- |
+| `/debug/schema`       | Table / column inspector                                                                       |
+| `/select-customer`    | Sets `customer_id` cookie                                                                      |
+| `/dashboard`          | Summary + 5 recent orders                                                                      |
+| `/place-order`        | Multi-line insert (transaction)                                                                |
+| `/orders`             | History; detail at `/orders/[orderId]`                                                         |
+| `/scoring`            | Calls `SCORING_URL` when configured, otherwise runs `python3 ml/jobs/run_inference.py` locally |
+| `/warehouse/priority` | Top 50 unfulfilled by predicted late risk                                                      |
 
 ### Environment
 
@@ -98,16 +98,16 @@ From `apps/web/`, the app uses `DATABASE_URL` when present. See [`apps/web/.env.
 ## Deployment (Supabase + Vercel)
 
 1. Create the Supabase database.
-	- Run [`infra/supabase/migrations/20250402120000_shop_schema.sql`](infra/supabase/migrations/20250402120000_shop_schema.sql) in the Supabase SQL editor.
-	- Run [`infra/supabase/migrations/20250402120001_reset_sequences.sql`](infra/supabase/migrations/20250402120001_reset_sequences.sql) after loading data.
-	- Load the SQLite data with [`tools/scripts/sqlite_to_postgres.py`](tools/scripts/sqlite_to_postgres.py) or [`tools/scripts/migrate_to_supabase.py`](tools/scripts/migrate_to_supabase.py) using `DATABASE_URL`.
+   - Run [`infra/supabase/migrations/20250402120000_shop_schema.sql`](infra/supabase/migrations/20250402120000_shop_schema.sql) in the Supabase SQL editor.
+   - Run [`infra/supabase/migrations/20250402120001_reset_sequences.sql`](infra/supabase/migrations/20250402120001_reset_sequences.sql) after loading data.
+   - Load the SQLite data with [`tools/scripts/sqlite_to_postgres.py`](tools/scripts/sqlite_to_postgres.py) or [`tools/scripts/migrate_to_supabase.py`](tools/scripts/migrate_to_supabase.py) using `DATABASE_URL`.
 2. Deploy the Next.js app to Vercel.
-	- Set `DATABASE_URL` to the Supabase pooler connection string.
-	- Set `SCORING_URL` to an external Python job endpoint if you want the `Run scoring` button to work in production.
-	- Set `SHOP_REPO_ROOT` only if the app root is not the repo root.
+   - Set `DATABASE_URL` to the Supabase pooler connection string.
+   - Set `SCORING_URL` to an external Python job endpoint if you want the `Run scoring` button to work in production.
+   - Set `SHOP_REPO_ROOT` only if the app root is not the repo root.
 3. Deploy scoring as a separate Python service.
-	- Any host that can run `ml/jobs/run_inference.py` works, such as Render, Railway, Fly.io, or a VPS.
-	- The service should expose a `POST` endpoint that Vercel can call through `SCORING_URL`.
+   - Any host that can run `ml/jobs/run_inference.py` works, such as Render, Railway, Fly.io, or a VPS.
+   - The service should expose a `POST` endpoint that Vercel can call through `SCORING_URL`.
 
 ## Project layout
 

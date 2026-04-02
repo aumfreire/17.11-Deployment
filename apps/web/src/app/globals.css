@@ -46,6 +46,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -71,12 +72,12 @@ a:hover {
   padding: 1.5rem 1.35rem 3.5rem;
 }
 
-main > div > h1:first-child {
+main>div>h1:first-child {
   margin-bottom: 0.4rem;
   letter-spacing: -0.02em;
 }
 
-main > div > h1:first-child + .lead {
+main>div>h1:first-child+.lead {
   margin-top: 0;
   margin-bottom: 1.35rem;
 }
@@ -109,7 +110,7 @@ h2.form-section-title {
   color: var(--text);
 }
 
-.card > h2.form-section-title:first-child {
+.card>h2.form-section-title:first-child {
   margin-top: 0;
 }
 
@@ -235,7 +236,7 @@ table {
   box-shadow: var(--shadow);
 }
 
-.card > table {
+.card>table {
   box-shadow: none;
   border-radius: var(--radius-sm);
   margin: 0.35rem 0 0;
@@ -291,7 +292,7 @@ th {
   box-shadow: var(--shadow-sm);
 }
 
-.card + .stats-grid {
+.card+.stats-grid {
   margin-top: 0.35rem;
 }
 
@@ -482,7 +483,7 @@ button:focus-visible {
 }
 
 .field label,
-.field > span:first-child {
+.field>span:first-child {
   font-size: 0.8125rem;
   font-weight: 500;
   color: var(--muted);

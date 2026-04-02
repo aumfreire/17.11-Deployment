@@ -40,11 +40,11 @@ export default async function DashboardPage() {
        LIMIT 5`,
     )
     .all(customerId) as {
-    order_id: number;
-    order_datetime: string;
-    order_total: number;
-    fulfilled: number;
-  }[];
+      order_id: number;
+      order_datetime: string;
+      order_total: number;
+      fulfilled: number;
+    }[];
 
   const summary = await db
     .prepare(
@@ -59,13 +59,13 @@ export default async function DashboardPage() {
        WHERE customer_id = ?`,
     )
     .get(customerId) as {
-    total_orders: number;
-    fulfilled_orders: number | null;
-    open_orders: number | null;
-    total_spent: number;
-    avg_order_value: number;
-    last_order_at: string | null;
-  };
+      total_orders: number;
+      fulfilled_orders: number | null;
+      open_orders: number | null;
+      total_spent: number;
+      avg_order_value: number;
+      last_order_at: string | null;
+    };
 
   return (
     <div>

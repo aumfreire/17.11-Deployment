@@ -18,13 +18,13 @@ export default async function WarehousePriorityPage() {
        LIMIT 50`,
     )
     .all() as {
-    order_id: number;
-    order_datetime: string;
-    order_total: number;
-    late_delivery_probability: number;
-    predicted_late_delivery: number;
-    prediction_timestamp: string;
-  }[];
+      order_id: number;
+      order_datetime: string;
+      order_total: number;
+      late_delivery_probability: number;
+      predicted_late_delivery: number;
+      prediction_timestamp: string;
+    }[];
 
   const totalScored = rows.length;
   const predictedLateCount = rows.filter((r) => r.predicted_late_delivery).length;
