@@ -36,6 +36,11 @@ function isPostgresMode(): boolean {
 }
 
 function getSqliteDb(): Database.Database {
+  if (process.env.VERCEL) {
+    throw new Error(
+      "SQLite is not available on Vercel. Set DATABASE_URL to your Supabase pooler connection string in Vercel environment variables.",
+    );
+  }
   if (!sqliteDb) {
     sqliteDb = new Database(getDbPath());
     sqliteDb.pragma("foreign_keys = ON");
