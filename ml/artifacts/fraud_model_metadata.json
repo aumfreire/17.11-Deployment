@@ -7,8 +7,6 @@
   "threshold": 0.475,
   "n_features_raw_cat": 12,
   "n_features_raw_num": 11,
-  "principled_excludes": [
-    "risk_score"
-  ],
+  "principled_excludes": ["risk_score"],
   "holdout_test_average_precision_after_refit_trainval": 0.11238627308128761
 }

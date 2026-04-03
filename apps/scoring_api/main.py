@@ -114,7 +114,10 @@ def score(x_scoring_secret: str | None = Header(default=None)) -> dict[str, obje
   model = joblib.load(MODEL_PATH)
 
   with connect(DATABASE_URL) as conn:
-    score_df = pd.read_sql_query(SCORE_SQL, conn)
+    with conn.cursor() as cur:
+      cur.execute(SCORE_SQL)
+      cols = [desc[0] for desc in cur.description]
+      score_df = pd.DataFrame(cur.fetchall(), columns=cols)
 
     if score_df.empty:
       return {"ok": True, "message": "Scored 0 orders", "scored": 0}
