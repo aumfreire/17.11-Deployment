@@ -6,10 +6,18 @@ export async function POST() {
   const externalScoringUrl = process.env.SCORING_URL;
   if (externalScoringUrl) {
     const sharedSecret = process.env.SCORING_SHARED_SECRET;
-    const response = await fetch(externalScoringUrl, {
-      method: "POST",
-      headers: sharedSecret ? { "x-scoring-secret": sharedSecret } : undefined,
-    });
+    let response: Response;
+    try {
+      response = await fetch(externalScoringUrl, {
+        method: "POST",
+        headers: sharedSecret ? { "x-scoring-secret": sharedSecret } : undefined,
+      });
+    } catch (err) {
+      return Response.json(
+        { ok: false, error: `Cannot reach scoring service at ${externalScoringUrl}: ${err}` },
+        { status: 502 },
+      );
+    }
     const bodyText = await response.text();
     let parsed: { ok?: boolean; message?: string; error?: string } | null = null;
     try {
