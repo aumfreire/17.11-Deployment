@@ -1,6 +1,6 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "python -m pip install --upgrade pip && python -m pip install -r apps/scoring_api/requirements.txt"
+buildCommand = "python3 -m pip install --upgrade pip && python3 -m pip install -r apps/scoring_api/requirements.txt"
 
 [deploy]
 startCommand = "uvicorn apps.scoring_api.main:app --host 0.0.0.0 --port $PORT"
