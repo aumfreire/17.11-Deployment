@@ -5,15 +5,32 @@ import { getPythonPath, getRepoRoot } from "@/lib/paths";
 export async function POST() {
   const externalScoringUrl = process.env.SCORING_URL;
   if (externalScoringUrl) {
-    const response = await fetch(externalScoringUrl, { method: "POST" });
-    const stdout = await response.text();
+    const sharedSecret = process.env.SCORING_SHARED_SECRET;
+    const response = await fetch(externalScoringUrl, {
+      method: "POST",
+      headers: sharedSecret ? { "x-scoring-secret": sharedSecret } : undefined,
+    });
+    const bodyText = await response.text();
+    let parsed: { ok?: boolean; message?: string; error?: string } | null = null;
+    try {
+      parsed = JSON.parse(bodyText) as { ok?: boolean; message?: string; error?: string };
+    } catch {
+      parsed = null;
+    }
     if (!response.ok) {
       return Response.json(
-        { ok: false, error: stdout || `Scoring endpoint failed with ${response.status}` },
+        {
+          ok: false,
+          error:
+            parsed?.error ||
+            parsed?.message ||
+            bodyText ||
+            `Scoring endpoint failed with ${response.status}`,
+        },
         { status: response.status },
       );
     }
-    return Response.json({ ok: true, stdout: stdout.trim() });
+    return Response.json({ ok: true, stdout: parsed?.message || bodyText.trim() });
   }
 
   if (process.env.VERCEL) {
